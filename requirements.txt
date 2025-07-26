@@ -1,0 +1,23 @@
+# Core Dependencies
+chromadb>=0.4.22
+sentence-transformers>=2.5.1
+numpy>=1.26.0
+torch>=2.1.0
+transformers>=4.36.0
+
+# Web Framework
+fastapi>=0.104.1
+uvicorn>=0.24.0
+jinja2>=3.1.0
+python-multipart>=0.0.6
+
+# Data Processing
+pydantic>=2.5.0
+requests>=2.31.0
+
+# Development & Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Optional: Environment Management
+python-dotenv>=1.0.0 

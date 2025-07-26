@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}오류 - SKAX-RA-AI-SEARCH{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="text-center">
+                <i class="fas fa-exclamation-triangle fa-5x text-warning mb-4"></i>
+                <h2 class="text-danger mb-4">오류가 발생했습니다</h2>
+                <p class="lead text-muted mb-4">{{ error }}</p>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="javascript:history.back()" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> 이전 페이지로
+                    </a>
+                    <a href="/" class="btn btn-outline-secondary">
+                        <i class="fas fa-home"></i> 홈으로
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ 

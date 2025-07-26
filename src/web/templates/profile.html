@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ developer.name }} - 프로필{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="card-title">
+                        <i class="fas fa-user"></i> {{ developer.name }} 프로필
+                    </h3>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> 뒤로
+                    </a>
+                </div>
+                
+                <!-- 기본 정보 -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-info-circle"></i> 기본 정보</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>ID:</strong> {{ developer.developer_id }}</li>
+                            <li><strong>지역:</strong> {{ developer.location }}</li>
+                            <li><strong>경력 레벨:</strong> {{ developer.seniority }}</li>
+                            <li><strong>주요 역할:</strong> {{ developer.primary_role }}</li>
+                            <li><strong>경력 연차:</strong> {{ developer.years_experience }}년</li>
+                            <li><strong>가용성:</strong> {{ developer.availability }}</li>
+                            <li><strong>연봉:</strong> {{ developer.salary_range }}만원</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-graduation-cap"></i> 학력</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>학위:</strong> {{ developer.education.degree }}</li>
+                            <li><strong>전공:</strong> {{ developer.education.major }}</li>
+                        </ul>
+                        
+                        <h5><i class="fas fa-star"></i> 활동</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>GitHub 스타:</strong> {{ developer.github_stars }}개</li>
+                            <li><strong>Stack Overflow 평판:</strong> {{ developer.stackoverflow_reputation }}</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 기술 스택 -->
+                <div class="mb-4">
+                    <h5><i class="fas fa-code"></i> 기술 스택</h5>
+                    <div class="row">
+                        {% for skill in developer.skills %}
+                        <div class="col-md-4 mb-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ skill.name }}</h6>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            숙련도: {{ skill.level }}/5<br>
+                                            사용 경험: {{ skill.years }}년
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- 경력 -->
+                <div class="mb-4">
+                    <h5><i class="fas fa-briefcase"></i> 경력</h5>
+                    <div class="row">
+                        {% for exp in developer.experience %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ exp.company }}</h6>
+                                    <p class="card-text">
+                                        <strong>{{ exp.position }}</strong><br>
+                                        <small class="text-muted">
+                                            {{ exp.duration_months }}개월 | {{ exp.industry }}
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- 액션 버튼 -->
+                <div class="text-center">
+                    <button class="btn btn-primary me-2">
+                        <i class="fas fa-envelope"></i> 연락하기
+                    </button>
+                    <button class="btn btn-success me-2">
+                        <i class="fas fa-heart"></i> 관심 등록
+                    </button>
+                    <button class="btn btn-info">
+                        <i class="fas fa-share"></i> 공유
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

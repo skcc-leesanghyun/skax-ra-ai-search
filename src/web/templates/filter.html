@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}필터 검색 - SKAX-RA-AI-SEARCH{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-filter"></i> 필터 검색
+                </h3>
+                
+                <form id="filterForm">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="seniority" class="form-label">경력 레벨</label>
+                            <select class="form-select" id="seniority" name="seniority">
+                                <option value="">전체</option>
+                                <option value="junior">주니어</option>
+                                <option value="mid">미드</option>
+                                <option value="senior">시니어</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="location" class="form-label">지역</label>
+                            <select class="form-select" id="location" name="location">
+                                <option value="">전체</option>
+                                <option value="서울">서울</option>
+                                <option value="경기">경기</option>
+                                <option value="부산">부산</option>
+                                <option value="대구">대구</option>
+                                <option value="대전">대전</option>
+                                <option value="광주">광주</option>
+                                <option value="인천">인천</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="availability" class="form-label">가용성</label>
+                            <select class="form-select" id="availability" name="availability">
+                                <option value="">전체</option>
+                                <option value="available">즉시 가능</option>
+                                <option value="busy">바쁨</option>
+                                <option value="considering">고려 중</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="limit" class="form-label">결과 수</label>
+                            <select class="form-select" id="limit" name="limit">
+                                <option value="10">10개</option>
+                                <option value="20">20개</option>
+                                <option value="50">50개</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-filter"></i> 필터 적용
+                            </button>
+                            <button type="button" id="clearFilterBtn" class="btn btn-secondary">
+                                <i class="fas fa-eraser"></i> 초기화
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="loading mt-3">
+                    <div class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">검색 중...</span>
+                        </div>
+                        <p class="mt-2">검색 중입니다...</p>
+                    </div>
+                </div>
+                
+                <div id="results" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#filterForm').submit(function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        $('.loading').show();
+        $('#results').empty();
+        
+        $.ajax({
+            url: '/api/filter',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('.loading').hide();
+                if (response.success) {
+                    displayResults(response.results);
+                } else {
+                    $('#results').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> 오류: ${response.error}
+                        </div>
+                    `);
+                }
+            },
+            error: function() {
+                $('.loading').hide();
+                $('#results').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> 서버 오류가 발생했습니다.
+                    </div>
+                `);
+            }
+        });
+    });
+    
+    $('#clearFilterBtn').click(function() {
+        $('#filterForm')[0].reset();
+        $('#results').empty();
+    });
+    
+    function displayResults(results) {
+        if (results.length === 0) {
+            $('#results').html(`
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 조건에 맞는 개발자가 없습니다.
+                    <br><small>필터 조건을 완화해보세요.</small>
+                </div>
+            `);
+            return;
+        }
+        
+        let html = `
+            <h4 class="mb-3">
+                <i class="fas fa-list"></i> 필터 결과 (${results.length}명)
+            </h4>
+        `;
+        
+        results.forEach((result, index) => {
+            const metadata = result.metadata;
+            const score = result.score || 0;
+            // 점수 대신 순위 기반 추천도 계산 (1위: 100%, 2위: 95%, 3위: 90%...)
+            const recommendationPercent = Math.max(50, 100 - (index * 5)); // 최소 50% 보장
+            
+            html += `
+                <div class="card mb-3 result-item developer-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">
+                                    <span class="badge bg-warning me-2">#${index + 1}</span>
+                                    <i class="fas fa-user"></i> ${metadata.name}
+                                    <span class="badge bg-primary ms-2">${metadata.primary_role}</span>
+                                    <span class="badge bg-secondary ms-1">${metadata.seniority}</span>
+                                </h5>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt text-muted"></i> ${metadata.location} |
+                                    <i class="fas fa-clock text-muted"></i> ${metadata.years_experience}년 경력 |
+                                    <i class="fas fa-dollar-sign text-muted"></i> ${metadata.salary_range}만원 |
+                                    <i class="fas fa-circle text-${getAvailabilityColor(metadata.availability)}"></i> ${metadata.availability}
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-2">
+                                    <span class="badge bg-success score-badge fs-6">
+                                        <i class="fas fa-star"></i> 추천도: ${recommendationPercent}%
+                                    </span>
+                                </div>
+                                <a href="/profile/${metadata.developer_id}" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-eye"></i> 상세보기
+                                </a>
+                                <br>
+                                <small class="text-muted">ID: ${metadata.developer_id}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        $('#results').html(html);
+    }
+    
+    function getAvailabilityColor(availability) {
+        switch(availability) {
+            case 'available': return 'success';
+            case 'busy': return 'warning';
+            case 'considering': return 'info';
+            default: return 'secondary';
+        }
+    }
+});
+</script>
+{% endblock %}

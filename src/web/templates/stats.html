@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}통계 - SKAX-RA-AI-SEARCH{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-4">
+            <h2 class="text-white">
+                <i class="fas fa-chart-bar"></i> 데이터베이스 통계
+            </h2>
+        </div>
+        
+        <div class="row g-4" id="statsCards">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">총 개발자</h5>
+                        <h2 class="text-primary" id="totalDevelopers">-</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-code fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">기술 스택</h5>
+                        <h2 class="text-success" id="totalSkills">-</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-briefcase fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">경력 정보</h5>
+                        <h2 class="text-warning" id="totalExperience">-</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-database fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">총 레코드</h5>
+                        <h2 class="text-info" id="totalRecords">-</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-sync-alt"></i> 통계 새로고침
+                        </h5>
+                        <p class="card-text">
+                            최신 데이터베이스 통계를 확인하세요.
+                        </p>
+                        <button id="refreshStatsBtn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i> 통계 새로고침
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // 페이지 로드 시 통계 로드
+    loadStats();
+    
+    $('#refreshStatsBtn').click(function() {
+        loadStats();
+    });
+    
+    function loadStats() {
+        const btn = $('#refreshStatsBtn');
+        const originalText = btn.html();
+        
+        btn.prop('disabled', true);
+        btn.html('<i class="fas fa-spinner fa-spin"></i> 로딩 중...');
+        
+        $.ajax({
+            url: '/api/stats',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#totalDevelopers').text(response.stats.profiles);
+                    $('#totalSkills').text(response.stats.skills);
+                    $('#totalExperience').text(response.stats.experience);
+                    $('#totalRecords').text(response.stats.total);
+                } else {
+                    alert('통계 로드 실패: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('서버 오류가 발생했습니다.');
+            },
+            complete: function() {
+                btn.prop('disabled', false);
+                btn.html(originalText);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

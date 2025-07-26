@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}홈 - SKAX-RA-AI-SEARCH{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-white mb-4">
+                <i class="fas fa-search"></i> SKAX-RA-AI-SEARCH
+            </h1>
+            <p class="lead text-white-50 mb-4">
+                AI 기반 개발자 검색 시스템<br>
+                벡터 데이터베이스로 정확한 매칭을 제공합니다
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">자연어 검색</h5>
+                        <p class="card-text">
+                            "시니어 React 개발자 서울거주" 같은 자연어로 검색하세요
+                        </p>
+                        <a href="/search" class="btn btn-primary">
+                            <i class="fas fa-search"></i> 검색하기
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-filter fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">필터 검색</h5>
+                        <p class="card-text">
+                            세부 조건을 설정하여 정확한 개발자를 찾아보세요
+                        </p>
+                        <a href="/filter" class="btn btn-success">
+                            <i class="fas fa-filter"></i> 필터 검색
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-database"></i> 데이터 초기화
+                        </h5>
+                        <p class="card-text">
+                            샘플 개발자 데이터를 생성하여 시스템을 테스트해보세요.
+                        </p>
+                        <button id="initDataBtn" class="btn btn-warning">
+                            <i class="fas fa-download"></i> 샘플 데이터 생성
+                        </button>
+                        <div id="initStatus" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-lightbulb"></i> 검색 팁
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">
+                                    <i class="fas fa-language"></i> 자연어 검색 예시
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-arrow-right text-muted"></i> "시니어 React 개발자"</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> "서울거주 즉시시작"</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> "카카오 경력 5년이상"</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> "Python 백엔드 개발자"</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-success">
+                                    <i class="fas fa-cogs"></i> 필터 옵션
+                                </h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-arrow-right text-muted"></i> 경력 레벨 (주니어/미드/시니어)</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> 가용성 (즉시/바쁨/고려)</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> 지역 (서울/경기/부산 등)</li>
+                                    <li><i class="fas fa-arrow-right text-muted"></i> 기술 스택 (React/Python/Java 등)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#initDataBtn').click(function() {
+        const btn = $(this);
+        const originalText = btn.html();
+        
+        btn.prop('disabled', true);
+        btn.html('<i class="fas fa-spinner fa-spin"></i> 데이터 생성 중...');
+        
+        $.ajax({
+            url: '/api/init-data',
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    $('#initStatus').html(`
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> ${response.message}
+                            <br><small>데이터베이스 통계: 프로필 ${response.stats.profiles}개, 기술 ${response.stats.skills}개, 경력 ${response.stats.experience}개</small>
+                        </div>
+                    `);
+                } else {
+                    $('#initStatus').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> 오류: ${response.error}
+                        </div>
+                    `);
+                }
+            },
+            error: function() {
+                $('#initStatus').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> 서버 오류가 발생했습니다.
+                    </div>
+                `);
+            },
+            complete: function() {
+                btn.prop('disabled', false);
+                btn.html(originalText);
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}검색 - SKAX-RA-AI-SEARCH{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">
+                    <i class="fas fa-search"></i> 개발자 검색
+                </h3>
+                
+                <form id="searchForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="query" class="form-label">검색어</label>
+                            <input type="text" class="form-control" id="query" name="query" 
+                                   placeholder="예: 시니어 React 개발자 서울거주" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="searchType" class="form-label">검색 타입</label>
+                            <select class="form-select" id="searchType" name="searchType">
+                                <option value="comprehensive">종합 검색</option>
+                                <option value="profile_only">프로필만</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="filterMode" class="form-label">필터 모드</label>
+                            <select class="form-select" id="filterMode" name="filterMode">
+                                <option value="default">기본</option>
+                                <option value="strict">엄격</option>
+                                <option value="flexible">유연</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="limit" class="form-label">결과 수</label>
+                            <select class="form-select" id="limit" name="limit">
+                                <option value="10">10개</option>
+                                <option value="20">20개</option>
+                                <option value="50">50개</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> 검색
+                            </button>
+                            <button type="button" id="clearBtn" class="btn btn-secondary">
+                                <i class="fas fa-eraser"></i> 초기화
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="loading mt-3">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">검색 중...</span>
+                        </div>
+                        <p class="mt-2">검색 중입니다...</p>
+                    </div>
+                </div>
+                
+                <div id="results" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#searchForm').submit(function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const query = $('#query').val().trim();
+        
+        // 필터 모드 추가
+        formData.append('filterMode', $('#filterMode').val());
+        
+        if (!query) {
+            alert('검색어를 입력해주세요.');
+            return;
+        }
+        
+        $('.loading').show();
+        $('#results').empty();
+        
+        $.ajax({
+            url: '/api/search',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('.loading').hide();
+                console.log('Search response:', response); // 디버깅용
+                
+                if (response && response.success) {
+                    displayResults(response.results, response.query, response);
+                } else {
+                    const errorMsg = response && response.error ? response.error : '알 수 없는 오류가 발생했습니다.';
+                    $('#results').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle"></i> 오류: ${errorMsg}
+                        </div>
+                    `);
+                }
+            },
+            error: function() {
+                $('.loading').hide();
+                $('#results').html(`
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> 서버 오류가 발생했습니다.
+                    </div>
+                `);
+            }
+        });
+    });
+    
+    $('#clearBtn').click(function() {
+        $('#query').val('');
+        $('#results').empty();
+    });
+    
+    function displayResults(results, query, response) {
+        // results가 undefined이거나 null인 경우 처리
+        if (!results || !Array.isArray(results)) {
+            $('#results').html(`
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> 검색 결과를 처리할 수 없습니다.
+                    <br><small>서버에서 예상치 못한 응답을 받았습니다.</small>
+                </div>
+            `);
+            return;
+        }
+        
+        if (results.length === 0) {
+            $('#results').html(`
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> "${query}"에 대한 검색 결과가 없습니다.
+                    <br><small>필터 조건이 너무 엄격할 수 있습니다. 조건을 완화해보세요.</small>
+                </div>
+            `);
+            return;
+        }
+        
+        // 필터 정보 표시
+        let filterInfo = '';
+        if (response.filter_info) {
+            filterInfo = `
+                <div class="alert alert-info mb-3">
+                    <i class="fas fa-filter"></i> <strong>적용된 필터:</strong> ${response.filter_info}
+                    <br><small class="text-muted">필터 모드: ${response.filter_mode}</small>
+                </div>
+            `;
+        }
+        
+        let html = `
+            ${filterInfo}
+            <h4 class="mb-3">
+                <i class="fas fa-list"></i> 검색 결과 (${results.length}명)
+                <small class="text-muted">"${query}"</small>
+            </h4>
+        `;
+        
+        results.forEach((result, index) => {
+            // result가 유효한지 확인
+            if (!result || !result.metadata) {
+                console.warn('Invalid result at index:', index, result);
+                return; // 이 항목을 건너뛰고 다음으로
+            }
+            
+            const metadata = result.metadata;
+            const score = result.total_score || result.score || 0;
+            // 점수 대신 순위 기반 추천도 계산 (1위: 100%, 2위: 95%, 3위: 90%...)
+            const recommendationPercent = Math.max(50, 100 - (index * 5)); // 최소 50% 보장
+            
+            html += `
+                <div class="card mb-3 result-item developer-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">
+                                    <span class="badge bg-warning me-2">#${index + 1}</span>
+                                    <i class="fas fa-user"></i> ${metadata.name}
+                                    <span class="badge bg-primary ms-2">${metadata.primary_role}</span>
+                                    <span class="badge bg-secondary ms-1">${metadata.seniority}</span>
+                                </h5>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt text-muted"></i> ${metadata.location} |
+                                    <i class="fas fa-clock text-muted"></i> ${metadata.years_experience}년 경력 |
+                                    <i class="fas fa-dollar-sign text-muted"></i> ${metadata.salary_range}만원 |
+                                    <i class="fas fa-circle text-${getAvailabilityColor(metadata.availability)}"></i> ${metadata.availability}
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-2">
+                                    <span class="badge bg-success score-badge fs-6">
+                                        <i class="fas fa-star"></i> 추천도: ${recommendationPercent}%
+                                    </span>
+                                </div>
+                                <a href="/profile/${metadata.developer_id}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> 상세보기
+                                </a>
+                                <br>
+                                <small class="text-muted">ID: ${metadata.developer_id}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        $('#results').html(html);
+    }
+    
+    function getAvailabilityColor(availability) {
+        switch(availability) {
+            case 'available': return 'success';
+            case 'busy': return 'warning';
+            case 'considering': return 'info';
+            default: return 'secondary';
+        }
+    }
+});
+</script>
+{% endblock %}
