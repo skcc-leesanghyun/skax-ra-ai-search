@@ -3,99 +3,236 @@
 {% block title %}홈 - SKAX-RA-AI-SEARCH{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="text-center mb-5">
-            <h1 class="display-4 text-white mb-4">
-                <i class="fas fa-search"></i> SKAX-RA-AI-SEARCH
-            </h1>
-            <p class="lead text-white-50 mb-4">
-                AI 기반 개발자 검색 시스템<br>
-                벡터 데이터베이스로 정확한 매칭을 제공합니다
-            </p>
+<!-- 히어로 섹션 -->
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="card fade-in-up">
+            <div class="card-body text-center p-5">
+                <div class="mb-4">
+                    <div class="display-1 text-primary mb-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold text-dark mb-3">
+                        AI 기반 개발자 검색
+                    </h1>
+                    <p class="lead text-muted fs-4 mb-4">
+                        벡터 데이터베이스와 자연어 처리를 통해<br>
+                        <span class="text-primary fw-semibold">정확하고 직관적인</span> 개발자 매칭을 제공합니다
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/search" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>검색 시작하기
+                        </a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>기능 알아보기
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
+<!-- 주요 기능 섹션 -->
+<div id="features" class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark mb-3">
+                <i class="fas fa-star text-warning me-2"></i>
+                주요 기능
+            </h2>
+            <p class="text-muted fs-5">AI 기술로 구현된 혁신적인 검색 기능들</p>
+        </div>
+        
         <div class="row g-4">
             <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-search fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">자연어 검색</h5>
-                        <p class="card-text">
-                            "시니어 React 개발자 서울거주" 같은 자연어로 검색하세요
+                <div class="card h-100 fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                 style="width: 80px; height: 80px;">
+                                <i class="fas fa-language text-white fa-2x"></i>
+                            </div>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">자연어 검색</h4>
+                        <p class="card-text text-muted mb-4">
+                            "시니어 React 개발자 서울거주" 같은 자연스러운 언어로 검색하세요. 
+                            AI가 의도를 파악하여 최적의 결과를 제공합니다.
                         </p>
                         <a href="/search" class="btn btn-primary">
-                            <i class="fas fa-search"></i> 검색하기
+                            <i class="fas fa-search me-2"></i>검색하기
                         </a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-filter fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">필터 검색</h5>
-                        <p class="card-text">
-                            세부 조건을 설정하여 정확한 개발자를 찾아보세요
+                <div class="card h-100 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-4">
+                            <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                 style="width: 80px; height: 80px;">
+                                <i class="fas fa-filter text-white fa-2x"></i>
+                            </div>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">스마트 필터링</h4>
+                        <p class="card-text text-muted mb-4">
+                            경력, 기술, 지역, 가용성 등 세부 조건을 설정하여 
+                            정확한 매칭을 찾아보세요.
                         </p>
                         <a href="/filter" class="btn btn-success">
-                            <i class="fas fa-filter"></i> 필터 검색
+                            <i class="fas fa-filter me-2"></i>필터 검색
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-database"></i> 데이터 초기화
-                        </h5>
-                        <p class="card-text">
-                            샘플 개발자 데이터를 생성하여 시스템을 테스트해보세요.
+<!-- 데이터 초기화 섹션 -->
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="card fade-in-up" style="animation-delay: 0.3s;">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="card-title fw-bold mb-3">
+                            <i class="fas fa-database text-primary me-2"></i>
+                            샘플 데이터 생성
+                        </h4>
+                        <p class="card-text text-muted mb-0">
+                            다양한 프로필의 샘플 개발자 데이터를 생성하여 시스템을 테스트해보세요. 
+                            벡터 데이터베이스에 자동으로 저장됩니다.
                         </p>
-                        <button id="initDataBtn" class="btn btn-warning">
-                            <i class="fas fa-download"></i> 샘플 데이터 생성
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button id="initDataBtn" class="btn btn-warning btn-lg">
+                            <i class="fas fa-download me-2"></i>데이터 생성
                         </button>
-                        <div id="initStatus" class="mt-3"></div>
+                    </div>
+                </div>
+                <div id="initStatus" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 검색 팁 섹션 -->
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="card fade-in-up" style="animation-delay: 0.4s;">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h4 class="card-title fw-bold mb-3">
+                        <i class="fas fa-lightbulb text-warning me-2"></i>
+                        검색 팁 & 예시
+                    </h4>
+                    <p class="text-muted">효과적인 검색을 위한 다양한 예시들을 확인해보세요</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0 fw-bold">
+                                    <i class="fas fa-language me-2"></i>자연어 검색 예시
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    <span class="fw-semibold">"시니어 React 개발자"</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    <span class="fw-semibold">"서울거주 즉시시작"</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    <span class="fw-semibold">"카카오 경력 5년이상"</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-arrow-right text-primary me-2"></i>
+                                    <span class="fw-semibold">"Python 백엔드 개발자"</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0 fw-bold">
+                                    <i class="fas fa-cogs me-2"></i>필터 옵션
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-star text-success me-2"></i>
+                                    <span class="fw-semibold">경력 레벨 (주니어/미드/시니어)</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-clock text-success me-2"></i>
+                                    <span class="fw-semibold">가용성 (즉시/바쁨/고려)</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-map-marker-alt text-success me-2"></i>
+                                    <span class="fw-semibold">지역 (서울/경기/부산 등)</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-code text-success me-2"></i>
+                                    <span class="fw-semibold">기술 스택 (React/Python/Java 등)</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-lightbulb"></i> 검색 팁
-                        </h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="text-primary">
-                                    <i class="fas fa-language"></i> 자연어 검색 예시
-                                </h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="fas fa-arrow-right text-muted"></i> "시니어 React 개발자"</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> "서울거주 즉시시작"</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> "카카오 경력 5년이상"</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> "Python 백엔드 개발자"</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-success">
-                                    <i class="fas fa-cogs"></i> 필터 옵션
-                                </h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="fas fa-arrow-right text-muted"></i> 경력 레벨 (주니어/미드/시니어)</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> 가용성 (즉시/바쁨/고려)</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> 지역 (서울/경기/부산 등)</li>
-                                    <li><i class="fas fa-arrow-right text-muted"></i> 기술 스택 (React/Python/Java 등)</li>
-                                </ul>
-                            </div>
+<!-- 기술 스택 섹션 -->
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card fade-in-up" style="animation-delay: 0.5s;">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h4 class="card-title fw-bold mb-3">
+                        <i class="fas fa-cogs text-primary me-2"></i>
+                        사용된 기술 스택
+                    </h4>
+                    <p class="text-muted">최신 AI 기술과 웹 기술을 활용했습니다</p>
+                </div>
+                
+                <div class="row g-3 text-center">
+                    <div class="col-md-3">
+                        <div class="p-3 rounded bg-light">
+                            <i class="fas fa-brain text-primary fa-2x mb-2"></i>
+                            <h6 class="fw-bold">Sentence Transformers</h6>
+                            <small class="text-muted">벡터 임베딩</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded bg-light">
+                            <i class="fas fa-database text-success fa-2x mb-2"></i>
+                            <h6 class="fw-bold">ChromaDB</h6>
+                            <small class="text-muted">벡터 데이터베이스</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded bg-light">
+                            <i class="fas fa-code text-warning fa-2x mb-2"></i>
+                            <h6 class="fw-bold">FastAPI</h6>
+                            <small class="text-muted">백엔드 API</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="p-3 rounded bg-light">
+                            <i class="fas fa-palette text-info fa-2x mb-2"></i>
+                            <h6 class="fw-bold">Bootstrap 5</h6>
+                            <small class="text-muted">프론트엔드 UI</small>
                         </div>
                     </div>
                 </div>
@@ -108,12 +245,13 @@
 {% block scripts %}
 <script>
 $(document).ready(function() {
+    // 데이터 초기화 버튼
     $('#initDataBtn').click(function() {
         const btn = $(this);
         const originalText = btn.html();
         
         btn.prop('disabled', true);
-        btn.html('<i class="fas fa-spinner fa-spin"></i> 데이터 생성 중...');
+        btn.html('<i class="fas fa-spinner fa-spin me-2"></i>생성 중...');
         
         $.ajax({
             url: '/api/init-data',
@@ -121,23 +259,38 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     $('#initStatus').html(`
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle"></i> ${response.message}
-                            <br><small>데이터베이스 통계: 프로필 ${response.stats.profiles}개, 기술 ${response.stats.skills}개, 경력 ${response.stats.experience}개</small>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle text-success me-3 fs-4"></i>
+                                <div>
+                                    <h6 class="mb-1 fw-semibold">데이터 생성 완료!</h6>
+                                    <p class="mb-0">${response.message}</p>
+                                    <small class="text-muted">
+                                        통계: 프로필 ${response.stats.profiles}개, 
+                                        기술 ${response.stats.skills}개, 
+                                        경력 ${response.stats.experience}개
+                                    </small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     `);
                 } else {
                     $('#initStatus').html(`
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-triangle"></i> 오류: ${response.error}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            오류: ${response.error}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     `);
                 }
             },
             error: function() {
                 $('#initStatus').html(`
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-triangle"></i> 서버 오류가 발생했습니다.
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        서버 오류가 발생했습니다.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 `);
             },
@@ -147,6 +300,43 @@ $(document).ready(function() {
             }
         });
     });
+    
+    // 부드러운 스크롤
+    $('a[href^="#"]').on('click', function(event) {
+        var target = $(this.getAttribute('href'));
+        if (target.length) {
+            event.preventDefault();
+            $('html, body').stop().animate({
+                scrollTop: target.offset().top - 100
+            }, 1000);
+        }
+    });
 });
 </script>
+
+<style>
+.feature-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 {% endblock %} 
